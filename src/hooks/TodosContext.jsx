@@ -11,15 +11,19 @@ export const TodosProvider = ({ children }) => {
   const [todos, setTodos] = useState([])
 
   useEffect(() => {
-    axios.get()
-      .then((response) => {
+    const fetchTodos = async () => {
+      try {
+        const response = await axios.get()
         console.log(response)
         setTodos(response.data.slice(0, 10))
-      })
-      .catch((err) => {
+      }
+      catch {
         console.log(err.message);
         setTodos([])
-      })
+      }
+    }
+
+    fetchTodos()
   }, [])
   const [searchTodo, setSearchTodo] = useState('')
 

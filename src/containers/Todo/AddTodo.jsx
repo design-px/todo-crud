@@ -10,23 +10,22 @@ function AddTodo() {
   const [title, setTitle] = useState('')
   const navigate = useNavigate()
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault()
 
     if (title) {
+      try {
+        const response = await axios.post('', {
+          todoId: Date.now(),
+          title: title,
+          completed: false
+        })
+        console.log('added todo', response.data)
+        setTodos(prevTodos => [response.data, ...prevTodos])
+      } catch (err) {
+        console.log(err.message);
+      }
 
-      axios.post('', {
-        todoId: Date.now(),
-        title: title,
-        completed: false
-      })
-        .then(response => {
-          console.log('added todo', response.data)
-          setTodos(prevTodos => [response.data, ...prevTodos])
-        })
-        .catch((err) => {
-          console.log(err.message);
-        })
       navigate('/todos')
     }
   }

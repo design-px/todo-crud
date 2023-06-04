@@ -19,24 +19,23 @@ function EditTodo() {
     setEditedTitle(findTodo.title)
   }, [])
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault()
 
     if (editedTitle) {
       if (findTodo.id <= 200) {
         console.log(findTodo);
-        axios.put(id, {
-          ...findTodo,
-          title: editedTitle
-        })
-          .then((response) => {
-            console.log('edited todo', response.data)
-            setTodos(prevTodo => prevTodo.map(todo => todo.id == id ? response.data : todo))
-          })
-          .catch((err) => {
-            console.log(err.message);
-          })
 
+        try {
+          const response = await axios.put(`/${id}`, {
+            ...findTodo,
+            title: editedTitle
+          })
+          console.log('edited todo', response.data)
+          setTodos(prevTodo => prevTodo.map(todo => todo.id == id ? response.data : todo))
+        } catch (err) {
+          console.log(err.message);
+        }
 
       } else {
         setTodos(prevTodo => prevTodo.map(todo => todo.todoId == id ? { ...todo, title: editedTitle } : todo))

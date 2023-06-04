@@ -30,20 +30,19 @@ function AllTodos() {
     }))
   }
 
-  const handleDelete = (id, todoId, title) => {
+  const handleDelete = async (id, todoId, title) => {
     if (window.confirm(`Are you sure you want to delete this task?\n ${title} `)) {
       if (id > 200) {
         setTodos(prevTodo => prevTodo.filter(todo => todo.todoId !== todoId))
         return
       }
-      axios.delete(`${id}`)
-        .then((res) => {
-          console.log('removed todo', res.data);
-          setTodos(prevTodo => prevTodo.filter(todo => todo.id !== id))
-        }).catch((err) => {
-          console.log(err.message)
-        })
-
+      try {
+        const respone = await axios.delete(`${id}`)
+        console.log('removed todo', respone.data);
+        setTodos(prevTodo => prevTodo.filter(todo => todo.id !== id))
+      } catch (err) {
+        console.log(err.message)
+      }
     }
   }
 
