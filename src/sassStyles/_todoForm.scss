@@ -1,0 +1,56 @@
+.btn-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.todo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+  color: var(--text-box);
+
+  input {
+    width: 100%;
+    padding: .7rem 1rem;
+    background: transparent;
+    font-size: 1.5rem;
+    border: 1px solid var(--primary);
+    border-radius: 0.6rem;
+    color: var(--text);
+  }
+}
+
+.label-box {
+  position: relative;
+
+  label {
+    position: absolute;
+    transition: all .5s ease;
+    border: 1px solid var(--primary);
+    border-radius: 8px;
+
+    font-size: 0.8rem;
+    padding: 1px 11px;
+    left: 10px;
+    top: -10px;
+    background-color: var(--success);
+
+  }
+
+  .input-label {
+    transform: translateX(260px);
+  }
+
+  @media screen and (max-width:700px) {
+    .input-label {
+      transform: translateX(200px);
+    }
+  }
+
+  @media screen and (max-width:500px) {
+    .input-label {
+      transform: translateX(130px);
+    }
+  }
+}

@@ -1,0 +1,51 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  box-sizing: border-box;
+}
+
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text);
+  background: var(--app-bg);
+  line-height: 1.5;
+  letter-spacing: .075rem;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.todosapp {
+  display: grid;
+  grid-template-areas:
+    'nav-top nav-top'
+    'sidebar container '
+  ;
+  grid-template-columns: 1fr 4fr;
+  grid-template-rows: 50px auto;
+  gap: 2rem;
+  min-height: 100vh;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.nav-top {
+  grid-area: nav-top;
+}
+
+.container {
+  grid-area: container;
+}
+
+.sidebar {
+  grid-area: sidebar;
+}

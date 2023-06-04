@@ -1,0 +1,48 @@
+button {
+  background: var(--btn-bg);
+}
+
+.btn {
+  display: flex;
+  border-radius: 2rem;
+  padding: 6px;
+  color: var(--text-box);
+  border-radius: 5px;
+  font-size: .9rem;
+  padding: 4px 12px;
+  transition: all 300ms ease;
+  align-items: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:active {
+    scale: .95;
+  }
+}
+
+.add-btn {
+  font-size: 1.5rem;
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+  color: var(--text);
+  box-shadow: var(--todo-shadow);
+  background: var(--todo-bg);
+
+  svg {
+    scale: 1.2
+  }
+}
+
+.view-btn {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  color: var(--text-box);
+  border-radius: 5px;
+  font-size: .85rem;
+  cursor: pointer;
+  padding: 4px 12px;
+}

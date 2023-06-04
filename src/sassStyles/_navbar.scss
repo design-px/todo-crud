@@ -1,0 +1,36 @@
+.nav-top {
+  display: flex;
+  gap: 10px;
+  border-radius: 8px;
+  padding: 5px;
+  align-items: center;
+  justify-content: space-evenly;
+  transition: all .5s ease;
+  box-shadow: var(--todo-shadow);
+  background: var(--todo-bg);
+
+}
+
+
+.search-todos {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 40%;
+
+  input {
+    padding: 0.5rem .7rem;
+    border-radius: 10px;
+    color: var(--dark);
+    font-size: 1.1rem;
+    width: 100%;
+  }
+
+  .btn {
+    background: var(--dark);
+    position: absolute;
+    right: 10px;
+    font-size: 1.5rem;
+    padding: 0px 8px;
+  }
+}
