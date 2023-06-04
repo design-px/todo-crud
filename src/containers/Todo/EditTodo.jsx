@@ -1,6 +1,7 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useTodos } from "../../hooks/TodosContext";
+import axios from 'axios';
 
 function EditTodo() {
 
@@ -24,24 +25,18 @@ function EditTodo() {
     if (editedTitle) {
       if (findTodo.id <= 200) {
         console.log(findTodo);
-        fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
-          method: 'PUT',
-          body: JSON.stringify({
-            ...findTodo,
-            title: editedTitle
-          }),
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-          },
+        axios.put(id, {
+          ...findTodo,
+          title: editedTitle
         })
-          .then((response) => response.json())
-          .then((json) => {
-            console.log('edited todo', json)
-            setTodos(prevTodo => prevTodo.map(todo => todo.id == id ? json : todo))
+          .then((response) => {
+            console.log('edited todo', response.data)
+            setTodos(prevTodo => prevTodo.map(todo => todo.id == id ? response.data : todo))
           })
           .catch((err) => {
             console.log(err.message);
           })
+
 
       } else {
         setTodos(prevTodo => prevTodo.map(todo => todo.todoId == id ? { ...todo, title: editedTitle } : todo))

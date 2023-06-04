@@ -1,3 +1,4 @@
+import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 
 // create context
@@ -10,11 +11,10 @@ export const TodosProvider = ({ children }) => {
   const [todos, setTodos] = useState([])
 
   useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/todos')
-      .then((response) => response.json())
-      .then((json) => {
-        console.log(json)
-        setTodos(json.slice(0, 10))
+    axios.get()
+      .then((response) => {
+        console.log(response)
+        setTodos(response.data.slice(0, 10))
       })
       .catch((err) => {
         console.log(err.message);

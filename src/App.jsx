@@ -16,6 +16,9 @@ import {
 } from './containers/Todo';
 import { TodosProvider } from './hooks/TodosContext';
 
+import axios from 'axios';
+axios.defaults.baseURL = 'https://jsonplaceholder.typicode.com/todos';
+
 function App() {
 
   return (

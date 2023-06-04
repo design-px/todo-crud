@@ -4,7 +4,7 @@ import { FiPlus } from 'react-icons/fi'
 import { Link } from 'react-router-dom';
 import { useTodos } from '../../hooks/TodosContext';
 import TodoList from './TodoList';
-
+import axios from 'axios';
 
 function AllTodos() {
 
@@ -36,14 +36,14 @@ function AllTodos() {
         setTodos(prevTodo => prevTodo.filter(todo => todo.todoId !== todoId))
         return
       }
-      fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
-        method: "DELETE"
-      }).then((res) => {
-        console.log('removed todo', res.json());
-        setTodos(prevTodo => prevTodo.filter(todo => todo.id !== id))
-      }).catch((err) => {
-        console.log(err.message)
-      })
+      axios.delete(`${id}`)
+        .then((res) => {
+          console.log('removed todo', res.data);
+          setTodos(prevTodo => prevTodo.filter(todo => todo.id !== id))
+        }).catch((err) => {
+          console.log(err.message)
+        })
+
     }
   }
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTodos } from "../../hooks/TodosContext";
+import axios from 'axios';
 
 function AddTodo() {
 
@@ -14,21 +15,14 @@ function AddTodo() {
 
     if (title) {
 
-      fetch('https://jsonplaceholder.typicode.com/todos', {
-        method: 'POST',
-        body: JSON.stringify({
-          todoId: Date.now(),
-          title: title,
-          completed: false
-        }),
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-        },
+      axios.post('', {
+        todoId: Date.now(),
+        title: title,
+        completed: false
       })
-        .then((response) => response.json())
-        .then((json) => {
-          console.log('added todo', json)
-          setTodos(prevTodos => [json, ...prevTodos])
+        .then(response => {
+          console.log('added todo', response.data)
+          setTodos(prevTodos => [response.data, ...prevTodos])
         })
         .catch((err) => {
           console.log(err.message);
