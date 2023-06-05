@@ -2,10 +2,11 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTodos } from "../../hooks/TodosContext";
 import axios from 'axios';
+import Skeleton from "./Skeleton";
 
 function AddTodo() {
 
-  const { setTodos } = useTodos()
+  const { setTodos, setIsLoading, isLoading } = useTodos()
 
   const [title, setTitle] = useState('')
   const navigate = useNavigate()
@@ -15,11 +16,13 @@ function AddTodo() {
 
     if (title) {
       try {
+        setIsLoading(true)
         const response = await axios.post('', {
           todoId: Date.now(),
           title: title,
           completed: false
         })
+        setIsLoading(false)
         console.log('added todo', response.data)
         setTodos(prevTodos => [response.data, ...prevTodos])
       } catch (err) {
@@ -34,24 +37,30 @@ function AddTodo() {
 
   return (
     <>
-      <div className="btn-header">
+      {
+        isLoading ?
+          <Skeleton />
+          :
+          <>
+            <div className="btn-header">
 
-        <Link to='/todos' className='btn danger'>Back</Link>
+              <Link to='/todos' className='btn danger'>Back</Link>
 
-        <button className="btn success" onClick={handleSubmit
-        }>Save</button>
+              <button className="btn success" onClick={handleSubmit
+              }>Save</button>
 
-      </div>
+            </div>
 
-      <form className="todo-form" onSubmit={handleSubmit}>
+            <form className="todo-form" onSubmit={handleSubmit}>
 
-        <div className="label-box">
-          <input type="text" id="todo-title" autoFocus value={title} onChange={e => setTitle(e.target.value)} maxLength={20} />
-          <label htmlFor="todo-title" className="input-label">Todo Title</label>
-        </div>
+              <div className="label-box">
+                <input type="text" id="todo-title" autoFocus value={title} onChange={e => setTitle(e.target.value)} maxLength={20} />
+                <label htmlFor="todo-title" className="input-label">Todo Title</label>
+              </div>
 
-
-      </form>
+            </form>
+          </>
+      }
 
     </>
   );

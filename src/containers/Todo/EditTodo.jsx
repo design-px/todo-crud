@@ -2,12 +2,13 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useTodos } from "../../hooks/TodosContext";
 import axios from 'axios';
+import Skeleton from "./Skeleton";
 
 function EditTodo() {
 
   const { id } = useParams()
   const navigate = useNavigate()
-  const { todos, setTodos } = useTodos()
+  const { todos, setTodos, isLoading, setIsLoading } = useTodos()
 
   const [editedTitle, setEditedTitle] = useState('')
   const findTodo = todos.find(prevTodo => {
@@ -27,10 +28,12 @@ function EditTodo() {
         console.log(findTodo);
 
         try {
+          setIsLoading(true)
           const response = await axios.put(`/${id}`, {
             ...findTodo,
             title: editedTitle
           })
+          setIsLoading(false)
           console.log('edited todo', response.data)
           setTodos(prevTodo => prevTodo.map(todo => todo.id == id ? response.data : todo))
         } catch (err) {
@@ -47,21 +50,28 @@ function EditTodo() {
 
   return (
     <>
-      <div className="btn-header">
+      {
+        isLoading ?
+          <Skeleton />
+          :
+          <>
+            <div className="btn-header">
 
-        <Link to='/todos' className='btn danger'>Cancel</Link>
+              <Link to='/todos' className='btn danger'>Cancel</Link>
 
-        <button className="btn success" onClick={handleSubmit}>Save changes</button>
+              <button className="btn success" onClick={handleSubmit}>Save changes</button>
 
-      </div>
+            </div>
 
-      <form className="todo-form" onSubmit={handleSubmit}>
+            <form className="todo-form" onSubmit={handleSubmit}>
 
-        <div className="label-box">
-          <input type="text" id="todo-title" autoFocus value={editedTitle} onChange={e => setEditedTitle(e.target.value)} />
-          <label htmlFor="todo-title" className="input-label">Todo Title</label>
-        </div>
-      </form>
+              <div className="label-box">
+                <input type="text" id="todo-title" autoFocus value={editedTitle} onChange={e => setEditedTitle(e.target.value)} />
+                <label htmlFor="todo-title" className="input-label">Todo Title</label>
+              </div>
+            </form>
+          </>
+      }
     </>
   );
 }

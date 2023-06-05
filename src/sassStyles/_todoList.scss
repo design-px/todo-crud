@@ -73,3 +73,50 @@
     display: flex;
   }
 }
+
+.loading {
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: .5rem;
+  box-shadow: var(--todo-shadow);
+  background: var(--todo-bg);
+  border-radius: 10px;
+
+  &>* {
+    background: rgb(226, 226, 226);
+    width: 20px;
+    height: 20px;
+
+
+    background-image: linear-gradient(to right, #d9d9d9 0%, rgba(0, 0, 0, .05) 20%, #d9d9d9 50%, #d9d9d9 100%);
+    background-size: 500px 200px;
+    background-repeat: no-repeat;
+    animation: loading 1s linear infinite;
+  }
+
+  .title {
+    width: 300px;
+  }
+
+  .circle {
+    border-radius: 50%;
+  }
+
+  .b {
+    width: 50px;
+    border-radius: 6px;
+  }
+}
+
+@keyframes loading {
+  0% {
+    background-position: -500px 0;
+  }
+
+  100% {
+    background-position: 500px 0;
+  }
+}
