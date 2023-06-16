@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTodos } from "../../hooks/TodosContext";
-import axios from 'axios';
 import Skeleton from "./Skeleton";
+import axios from "axios";
 
 function AddTodo() {
 
-  const { setTodos, setIsLoading, isLoading } = useTodos()
+  const { todos: { isLoading }, dispatch } = useTodos()
 
   const [title, setTitle] = useState('')
   const navigate = useNavigate()
@@ -15,16 +15,19 @@ function AddTodo() {
     e.preventDefault()
 
     if (title) {
+      const newTodo = {
+        todoId: Date.now(),
+        title: title,
+        completed: false
+      }
+
       try {
-        setIsLoading(true)
-        const response = await axios.post('', {
-          todoId: Date.now(),
-          title: title,
-          completed: false
-        })
-        setIsLoading(false)
+        dispatch({ type: 'loading', payload: true })
+        const response = await axios.post('', newTodo)
         console.log('added todo', response.data)
-        setTodos(prevTodos => [response.data, ...prevTodos])
+        dispatch({ type: 'post', payload: response })
+        dispatch({ type: 'loading', payload: false })
+
       } catch (err) {
         console.log(err.message);
       }
@@ -32,8 +35,6 @@ function AddTodo() {
       navigate('/todos')
     }
   }
-
-
 
   return (
     <>

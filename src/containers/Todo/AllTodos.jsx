@@ -4,50 +4,46 @@ import { FiPlus } from 'react-icons/fi'
 import { Link } from 'react-router-dom';
 import { useTodos } from '../../hooks/TodosContext';
 import TodoList from './TodoList';
-import axios from 'axios';
 import Skeleton from './Skeleton';
+import axios from 'axios';
 
 function AllTodos() {
 
-  const { todos, searchTodo, setTodos, isLoading } = useTodos()
-
+  const { todos, todos: { todosArray, searchTodo, isLoading }, dispatch } = useTodos()
+  console.log('alltodos', todos, todosArray);
   const filteredTodos = useMemo(() =>
     !searchTodo ?
-      todos :
-      todos.filter(todo =>
+      todosArray :
+      todosArray.filter(todo =>
         todo.title.toLowerCase().includes(searchTodo.toLowerCase()))
-    , [todos, searchTodo])
+    , [todosArray, searchTodo])
 
 
   const handleTick = (id, todoId) => {
-    setTodos(prevTodo => prevTodo.map(todo => {
-
-      if (id > 200) {
-        return todo.todoId == todoId ?
-          { ...todo, completed: !todo.completed } : todo
-      }
-      return todo.id == id ?
-        { ...todo, completed: !todo.completed } : todo
-    }))
+    dispatch({
+      type: 'tick',
+      payload: { id, todoId }
+    })
   }
 
   const handleDelete = async (id, todoId, title) => {
     if (window.confirm(`Are you sure you want to delete this task?\n ${title} `)) {
+
       if (id > 200) {
-        setTodos(prevTodo => prevTodo.filter(todo => todo.todoId !== todoId))
+        dispatch({ type: 'delete', payload: todoId })
         return
       }
+
       try {
         const respone = await axios.delete(`${id}`)
-        console.log('removed todo', respone.data);
-        setTodos(prevTodo => prevTodo.filter(todo => todo.id !== id))
+        console.log('removed todo', respone.data)
+        dispatch({ type: 'delete', payload: id })
+
       } catch (err) {
         console.log(err.message)
       }
     }
   }
-
-  console.log(todos);
 
   return (
     <>

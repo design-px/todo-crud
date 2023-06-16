@@ -1,5 +1,6 @@
+import { createContext, useContext, useEffect, useReducer, useState } from "react";
+import { reducerTodo } from "./reducer";
 import axios from "axios";
-import { createContext, useContext, useEffect, useState } from "react";
 
 // create context
 const TodosContext = createContext({});
@@ -8,29 +9,34 @@ const TodosContext = createContext({});
 // create context provider
 export const TodosProvider = ({ children }) => {
 
-  const [todos, setTodos] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [todos, dispatch] = useReducer(reducerTodo, {
+    todosArray: [],
+    searchTodo: '',
+    isLoading: true
+  })
 
   useEffect(() => {
-
     const fetchTodos = async () => {
+      console.log('fetching todos');
       try {
         const response = await axios.get()
-        console.log(response)
-        setIsLoading(false)
-        setTodos(response.data.slice(0, 10))
+        console.log(response.data)
+        dispatch({ type: 'get', payload: response })
+        dispatch({ type: 'loading', payload: false })
       }
       catch (err) {
-        console.log(err.message);
-        setTodos([])
+        console.log(err.message)
+        dispatch({ type: 'fetchErr' })
       }
     }
-
     fetchTodos()
-  }, [])
-  const [searchTodo, setSearchTodo] = useState('')
 
-  return <TodosContext.Provider value={{ todos, setTodos, searchTodo, setSearchTodo, isLoading, setIsLoading }}>{children}</TodosContext.Provider>
+  }, [])
+
+  console.log('todos', todos.todosArray);
+  console.log('todos isloading', todos.isLoading);
+
+  return <TodosContext.Provider value={{ todos, dispatch }}>{children}</TodosContext.Provider>
 
 }
 

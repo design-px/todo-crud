@@ -1,17 +1,17 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useTodos } from "../../hooks/TodosContext";
-import axios from 'axios';
 import Skeleton from "./Skeleton";
+import axios from "axios";
 
 function EditTodo() {
 
   const { id } = useParams()
   const navigate = useNavigate()
-  const { todos, setTodos, isLoading, setIsLoading } = useTodos()
+  const { todos: { todosArray, isLoading }, dispatch } = useTodos()
 
   const [editedTitle, setEditedTitle] = useState('')
-  const findTodo = todos.find(prevTodo => {
+  const findTodo = todosArray.find(prevTodo => {
     const selectedId = prevTodo.id > 200 ? prevTodo.todoId : prevTodo.id
     return selectedId == id
   })
@@ -24,25 +24,35 @@ function EditTodo() {
     e.preventDefault()
 
     if (editedTitle) {
-      if (findTodo.id <= 200) {
-        console.log(findTodo);
+      dispatch({ type: 'loading', payload: true })
 
+      const editedTodo = { ...findTodo, title: editedTitle }
+
+      if (findTodo.id <= 200) {
         try {
-          setIsLoading(true)
-          const response = await axios.put(`/${id}`, {
-            ...findTodo,
-            title: editedTitle
-          })
-          setIsLoading(false)
+          const response = await axios.put(`/${id}`, editedTodo)
           console.log('edited todo', response.data)
-          setTodos(prevTodo => prevTodo.map(todo => todo.id == id ? response.data : todo))
+          dispatch({
+            type: 'put',
+            payload: {
+              editedTodo: response.data,
+              id
+            }
+          })
         } catch (err) {
           console.log(err.message);
         }
-
       } else {
-        setTodos(prevTodo => prevTodo.map(todo => todo.todoId == id ? { ...todo, title: editedTitle } : todo))
+        dispatch({
+          type: 'put',
+          payload: {
+            editedTodo,
+            id
+          }
+        })
       }
+
+      dispatch({ type: 'loading', payload: false })
 
       navigate('/todos')
     }
